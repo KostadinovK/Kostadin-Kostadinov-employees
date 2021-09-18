@@ -9,6 +9,13 @@ namespace Services
 {
     public class EmployeeService : IEmployeeService
     {
+        private readonly IEmployeeDb employeeDb;
+
+        public EmployeeService(IEmployeeDb employeeDb)
+        {
+            this.employeeDb = employeeDb;
+        }
+
         public List<Employee> ReadEmployeesFile(string filePath)
         {
             var employees = new List<Employee>();
@@ -23,11 +30,19 @@ namespace Services
                     var employee = new Employee()
                     {
                         EmployeeId = csv.GetField<int>("EmpID"),
-                        ProjectId = csv.GetField<int>("ProjectID"),
-                        DateFrom = csv.GetField<DateTime>("DateFrom")
+                        ProjectId = csv.GetField<int>(" ProjectID"),
+                        DateFrom = csv.GetField<DateTime>(" DateFrom")
                     };
 
-                    var dateTo = csv.GetField<DateTime>("DateTo");
+                    var dateTo = csv.GetField(" DateTo").Trim();
+
+                    if (dateTo == "NULL")
+                    {
+                        employee.DateTo = DateTime.Now;
+                    } else
+                    {
+                        employee.DateTo = DateTime.ParseExact(dateTo, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    }
 
                     employees.Add(employee);
                 }
@@ -38,7 +53,15 @@ namespace Services
 
         public void AddEmployeesToDb(List<Employee> employees)
         {
-            throw new NotImplementedException();
+            if (employees == null)
+            {
+                return;
+            }
+
+            foreach (var employee in employees)
+            {
+                employeeDb.AddEmployee(employee);
+            }
         }
     }
 }
