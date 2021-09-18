@@ -63,5 +63,12 @@ namespace Services
                 employeeDb.AddEmployee(employee);
             }
         }
+
+        public List<EmployeePair> GetEmployeePairs()
+        {
+            var pairs = employeeDb.GetEmployeePairs();
+
+            return pairs;
+        }
     }
 }

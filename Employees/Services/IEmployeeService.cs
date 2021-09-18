@@ -8,5 +8,7 @@ namespace Services
         List<Employee> ReadEmployeesFile(string filePath);
 
         void AddEmployeesToDb(List<Employee> employees);
+
+        List<EmployeePair> GetEmployeePairs();
     }
 }

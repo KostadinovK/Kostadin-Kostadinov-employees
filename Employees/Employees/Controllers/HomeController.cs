@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Employees.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Employees.BindingModels;
+using Employees.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Net.Http.Headers;
 using Services;
 
 namespace Employees.Controllers
@@ -22,7 +23,27 @@ namespace Employees.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var employeePairs = employeeService.GetEmployeePairs();
+
+            var viewModel = new EmployeePairsViewModel
+            {
+                EmployeePairs = new List<EmployeePairViewModel>()
+            };
+
+            foreach (var pair in employeePairs)
+            {
+                var employeePairViewModel = new EmployeePairViewModel
+                {
+                    EmployeeId = pair.EmployeeId1,
+                    EmpoyeeId2 = pair.EmployeeId2,
+                    DaysWorked = pair.DaysWorked,
+                    ProjectIds = String.Join(", ", pair.ProjectIds)
+                };
+
+                viewModel.EmployeePairs.Add(employeePairViewModel);
+            }
+
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
