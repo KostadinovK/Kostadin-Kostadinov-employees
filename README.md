@@ -1,6 +1,6 @@
 # Kostadin-Kostadinov-employees
 
-Example CSV files with data can be found in the solution folder.
+Example CSV files with data can be found in the first `Employees` folder.
 
 employees.csv
 
