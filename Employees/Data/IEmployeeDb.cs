@@ -7,7 +7,5 @@ namespace Data
         List<Employee> GetEmployees();
 
         void AddEmployee(Employee emp);
-
-        List<EmployeePair> GetEmployeePairs();
     }
 }

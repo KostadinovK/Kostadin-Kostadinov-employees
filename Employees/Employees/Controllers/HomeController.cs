@@ -38,7 +38,7 @@ namespace Employees.Controllers
                     EmployeeId = pair.EmployeeId1,
                     EmpoyeeId2 = pair.EmployeeId2,
                     DaysWorked = pair.DaysWorked,
-                    ProjectIds = String.Join(", ", pair.ProjectIds)
+                    ProjectId = pair.ProjectId
                 };
 
                 viewModel.EmployeePairs.Add(employeePairViewModel);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Data
+﻿namespace Data
 {
     public class EmployeePair
     {
@@ -8,7 +6,7 @@ namespace Data
 
         public int EmployeeId2 { get; set; }
 
-        public List<int> ProjectIds { get; set; }
+        public int ProjectId { get; set; }
 
         public int DaysWorked { get; set; }
     }
