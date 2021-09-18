@@ -4,4 +4,16 @@
 
 <div class="text-center">
     <h3 class="display-4">Employees</h3>
+
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Upload" >
+
+        <div class="form-group">
+            <input type="file" name="EmployeesFile" class="form-control upload-file" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+
 </div>

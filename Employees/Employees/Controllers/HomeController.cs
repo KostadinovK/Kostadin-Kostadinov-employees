@@ -1,17 +1,19 @@
 ﻿using Employees.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Employees.BindingModels;
+using Microsoft.AspNetCore.Authorization;
+using Services;
 
 namespace Employees.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IEmployeeService employeeService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IEmployeeService employeeService)
         {
-            _logger = logger;
+            this.employeeService = employeeService;
         }
 
         public IActionResult Index()
@@ -23,6 +25,20 @@ namespace Employees.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Upload(EmployeesFileBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var employees = employeeService.ReadEmployeesFile(model.EmployeesFile.FileName);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
