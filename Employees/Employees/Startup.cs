@@ -28,6 +28,7 @@ namespace Employees
         {
             services.AddTransient<IEmployeeDb, EmployeeDb>();
             services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IUploadService, UploadService>();
             services.AddControllersWithViews();
         }
 

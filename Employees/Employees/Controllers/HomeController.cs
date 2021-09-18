@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Employees.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Employees.BindingModels;
 using Employees.ViewModels;
@@ -15,10 +14,12 @@ namespace Employees.Controllers
     public class HomeController : Controller
     {
         private readonly IEmployeeService employeeService;
+        private readonly IUploadService uploadService;
 
-        public HomeController(IEmployeeService employeeService)
+        public HomeController(IEmployeeService employeeService, IUploadService uploadService)
         {
             this.employeeService = employeeService;
+            this.uploadService = uploadService;
         }
 
         public IActionResult Index()
@@ -61,27 +62,13 @@ namespace Employees.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), "TempFiles");
+            var path = await uploadService.UploadCSVFileAsync(model.EmployeesFile);
 
-            if (!Directory.Exists(pathToSave))
-            {
-                Directory.CreateDirectory(pathToSave);
-            }
-
-            var fileName = "data.csv";
-
-            var fullPath = Path.Combine(pathToSave, fileName);
-
-            await using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                model.EmployeesFile.CopyTo(stream);
-            }
-
-            var employees = employeeService.ReadEmployeesFile(fullPath);
+            var employees = employeeService.ReadEmployeesFile(path);
 
             employeeService.AddEmployeesToDb(employees);
 
-            System.IO.File.Delete(fullPath);
+            uploadService.DeleteFile(path);
 
             return RedirectToAction("Index", "Home");
         }
